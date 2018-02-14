@@ -2,10 +2,17 @@ package prj.light;
 
 public class Window implements Illumination{
 
-    final static int luminosity = 700;
+    private final String name = "окно";
+    public final static int luminosity = 700;
+
 
     @Override
     public int getLuminosity() {
-        return 0;
+        return luminosity;
+    }
+
+    @Override
+    public void getDescription() {
+        System.out.print(name + " " + luminosity + " лк");
     }
 }

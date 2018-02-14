@@ -4,4 +4,6 @@ public interface Illumination {
 
     int getLuminosity();
 
+    void getDescription();
+
 }

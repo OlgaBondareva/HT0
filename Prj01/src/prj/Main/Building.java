@@ -1,18 +1,24 @@
 package prj.Main;
 
+import java.util.LinkedList;
+
 public class Building {
     private String name;
-    private Room rooms[];
+    private LinkedList <Room> rooms;
 
     public Building() {
         this.name = "Untitled Building";
+        rooms = new LinkedList<>();
     }
 
-    public void addRoom() {}
+    public void addRoom(Room room) {
+        rooms.add(room);
+    }
 
-    public void describe() {}
-
-    public Room getRoom() {
-        return rooms[0];
+    public void describe() {
+        System.out.print("\n" + name);
+        for (Room element: rooms) {
+            element.describe();
+        }
     }
 }
