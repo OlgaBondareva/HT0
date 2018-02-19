@@ -20,6 +20,5 @@ public class MainDemo {
         building1.getRoom("Room1").add(new Table("Desk", 3));
         building1.getRoom("Room1").add(new Chair("Soft and fluffy chair", 2));
         building1.describe();
-
     }
 }

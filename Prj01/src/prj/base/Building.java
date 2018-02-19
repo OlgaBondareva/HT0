@@ -1,5 +1,7 @@
 package prj.base;
 
+import prj.exceptions.RoomNullPointerException;
+
 import java.util.LinkedList;
 
 public class Building {
@@ -40,12 +42,12 @@ public class Building {
         this.name = name;
     }
 
-    public Room getRoom(String roomName) {
+    public Room getRoom(String roomName) throws RoomNullPointerException{
         for (Room element : rooms) {
             if (element.getName().equals(roomName)) {
                 return element;
             }
         }
-        return null;
+        throw new RoomNullPointerException("Such room don't exist in this building!");
     }
 }
