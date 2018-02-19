@@ -1,17 +1,11 @@
 package prj.light;
 
-public class Lightbulb implements Illumination{
+public class Lightbulb extends Illumination{
 
     private final String name = "лампочка";
-    private int luminosity;
 
     public Lightbulb(int luminosity) {
         this.luminosity = luminosity;
-    }
-
-    @Override
-    public int getLuminosity() {
-        return luminosity;
     }
 
     @Override

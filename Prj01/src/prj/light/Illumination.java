@@ -1,9 +1,13 @@
 package prj.light;
 
-public interface Illumination {
+abstract public class Illumination {
 
-    int getLuminosity();
+    protected int luminosity;
 
-    void getDescription();
+    public int getLuminosity() {
+        return luminosity;
+    }
+
+    public void getDescription() {}
 
 }

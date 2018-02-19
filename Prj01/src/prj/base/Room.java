@@ -1,4 +1,4 @@
-package prj.Main;
+package prj.base;
 
 import prj.exceptions.IlluminanceTooFewException;
 import prj.exceptions.IlluminanceTooMuchException;
@@ -19,6 +19,12 @@ public class Room {
     private LinkedList<Illumination> illuminations;
     private LinkedList<Furniture> furnitures;
 
+    /**
+     * @param n  room's name
+     * @param s  room's square
+     * @param wc window's count in this room
+     * @throws IlluminanceTooFewException
+     */
     public Room(String n, double s, int wc) throws IlluminanceTooFewException {
         this.name = n;
         this.square = s;
@@ -33,14 +39,14 @@ public class Room {
             throw new IlluminanceTooFewException("Площадь помещения освещена менее, чем на 300 лк", (300 - luminosity));
     }
 
-    public void addLightbulb(Lightbulb lightbulb) throws IlluminanceTooMuchException {
+    public void add(Lightbulb lightbulb) throws IlluminanceTooMuchException {
         int temp = luminosity + lightbulb.getLuminosity();
         if (temp > 4000) throw new IlluminanceTooMuchException("Освещённость больше 4000 лк.", (4000 - luminosity));
         luminosity += lightbulb.getLuminosity();
         illuminations.add(lightbulb);
     }
 
-    public void addFurniture(Furniture furniture) throws SpaceUsageTooMuchException {
+    public void add(Furniture furniture) throws SpaceUsageTooMuchException {
         double percent = (occupiedSquare + furniture.getSquare()) / square;
         if (percent > 0.7)
             throw new SpaceUsageTooMuchException("Площадь комнаты " + name + "занята больше, чем на 70%", (square - occupiedSquare));
@@ -63,5 +69,9 @@ public class Room {
         }
         System.out.print("\n\tЗанятая площадь: " + square + " м2");
         System.out.print(" (свободно " + occupiedSquare / square * 100 + "%)");
+    }
+
+    public String getName() {
+        return name;
     }
 }
