@@ -4,7 +4,7 @@ import prj.exceptions.IlluminanceTooFewException;
 import prj.exceptions.IlluminanceTooMuchException;
 import prj.exceptions.SpaceUsageTooMuchException;
 import prj.furniture.Furniture;
-import prj.light.Illumination;
+import prj.light.Illuminationable;
 import prj.light.Lightbulb;
 import prj.light.Window;
 
@@ -16,29 +16,35 @@ public class Room {
     private double square;
     private double occupiedSquare;
     private int luminosity;
-    private LinkedList<Illumination> illuminations;
+    private LinkedList<Illuminationable> illuminations;
     private LinkedList<Furniture> furnitures;
 
     /**
-     * @param n  room's name
-     * @param s  room's square
-     * @param wc window's count in this room
+     * @param name        room's name
+     * @param square      room's square
+     * @param windowCount window's count in this room
      * @throws IlluminanceTooFewException
      */
-    public Room(String n, double s, int wc) throws IlluminanceTooFewException {
-        this.name = n;
-        this.square = s;
-        this.windowCount = wc;
+    public Room(String name, double square, int windowCount) throws IlluminanceTooFewException, IlluminanceTooMuchException {
+        this.name = name;
+        this.square = square;
+        this.windowCount = windowCount;
         illuminations = new LinkedList<>();
         furnitures = new LinkedList<>();
-        this.luminosity = wc * Window.luminosity;
-        for (int i = 0; i < wc; i++) {
+        if ((windowCount * Window.luminosity) > 4000)
+            throw new IlluminanceTooMuchException("Площадь помещения освещена более, чем на 4000 лк", (4000 - windowCount * Window.luminosity));
+        this.luminosity = windowCount * Window.luminosity;
+        for (int i = 0; i < windowCount; i++) {
             illuminations.add(new Window());
         }
         if (luminosity < 300)
             throw new IlluminanceTooFewException("Площадь помещения освещена менее, чем на 300 лк", (300 - luminosity));
     }
 
+    /**
+     * @param lightbulb
+     * @throws IlluminanceTooMuchException
+     */
     public void add(Lightbulb lightbulb) throws IlluminanceTooMuchException {
         int temp = luminosity + lightbulb.getLuminosity();
         if (temp > 4000) throw new IlluminanceTooMuchException("Освещённость больше 4000 лк.", (4000 - luminosity));
@@ -56,8 +62,8 @@ public class Room {
 
     public void describe() {
         System.out.print("\n\t" + name);
-        System.out.print("\n\t\tОсвещённость = " + luminosity + " (");
-        for (Illumination element : illuminations) {
+        System.out.print("\n\t\tОсвещённость = " + luminosity + " лк" + " (");
+        for (Illuminationable element : illuminations) {
             element.getDescription();
             System.out.print(", ");
         }
@@ -67,8 +73,9 @@ public class Room {
             element.getDescription();
             System.out.print(", ");
         }
-        System.out.print("\n\tЗанятая площадь: " + square + " м2");
-        System.out.print(" (свободно " + occupiedSquare / square * 100 + "%)");
+        System.out.print("\n\t\tВся площадь: " + square + " м2");
+        System.out.print("\n\t\tЗанятая площадь: " + occupiedSquare + " м2");
+        System.out.print(" (свободно " + (100 - (occupiedSquare / square * 100)) + "%)");
     }
 
     public String getName() {
