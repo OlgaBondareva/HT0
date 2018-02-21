@@ -1,4 +1,6 @@
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -43,30 +45,35 @@ public class HTMLWriter {
         htmlBuilder.append("\n  <body>");
         for (Artist element : artistList) {
             htmlBuilder.append("<pre>").append(element.getName()).append("</pre>");
-            /*htmlBuilder.append("<pre>").append(" ").append(element.getAlbums());*/
-            /*htmlBuilder.append(element.getMinutesDuration()).append(" : ").append(element.getSecondsDuration());
-            htmlBuilder.append("(").append(element.getFileLocation()).append(")").append("</pre>");*/
-            for (Artist artist: artistList) {
+            for (Artist artist : artistList) {
                 htmlBuilder.append("<pre>").append(artist.getName()).append("</pre>");
-                for (String album: artist.getAlbumsNames()) {
+                for (String album : artist.getAlbumsNames()) {
                     htmlBuilder.append("<pre>").append(" " + album).append("</pre>");
                     LinkedList<Song> songs = artist.getSongsFromAlbum(album);
-                    for (Song song: songs) {
-                        htmlBuilder.append("<pre>").append(song.getTitle());
-                        htmlBuilder.append(song.getMinutesDuration()).append(":").append(song.getSecondsDuration());
-                        htmlBuilder.append("(").append(song.getFileLocation()).append(")");
+                    for (Song song : songs) {
+                        htmlBuilder.append("<pre>").append("  " + song.getTitle());
+                        htmlBuilder.append(" " + song.getMinutesDuration()).append(":").append(song.getSecondsDuration());
+                        htmlBuilder.append(" (").append(song.getFileLocation()).append(")");
                     }
                 }
             }
         }
-
-
         htmlBuilder.append("\n  </body>");
         htmlBuilder.append("\n </html>");
+        String songFile = htmlBuilder.toString();
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(outputFilename));
+            out.write(songFile);
+            out.close();
+        } catch (IOException e) {
+            System.out.println("Couldn't create output file. Please, check attributes of your folder.");
+            System.out.println(e.getMessage());
+            return false;
+        }
         return true;
     }
 
-    public void add(Artist info) {
-        artistList.add(info);
+    public void addArtist(Artist artist) {
+        artistList.add(artist);
     }
 }

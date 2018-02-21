@@ -22,7 +22,8 @@ public class Song {
     private int minutesDuration;
     private int secondsDuration;
 
-    public Song() {
+    public Song(String fileLocation) {
+        this.fileLocation = fileLocation;
         InputStream input;
         ContentHandler handler;
         Metadata metadata = null;
