@@ -7,8 +7,8 @@ import java.util.*;
 
 public class Main {
 
-    static final Logger rootLogger = LogManager.getRootLogger();
-    static final Logger userLogger = LogManager.getLogger(Main.class);
+    //static final Logger checkSumLogger = LogManager.getLogger(Main.class);
+    //static final Logger userLogger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
         /*if (args.length == 0) {
@@ -16,27 +16,36 @@ public class Main {
             return;
         }*/
         String arg = "D:/Music";
-        String extension = ".mp3";
+        String extension = "mp3";
+        // List of locations from command line
         LinkedList<String> locations = new LinkedList<>();
+
         TreeMap<Song, String> songs = new TreeMap<>();
         LinkedList<Artist> artists = new LinkedList<>();
+
+        HashSet<String> checkSums = new HashSet<>();
         HTMLWriter htmlWriter = new HTMLWriter();
         //Collections.addAll(locations, args);
         Collections.addAll(locations, arg);
-        try {
-            for (String location : locations) {
-                LinkedList<Song> tmp = (filesSearch(location, extension));
-                for (Song element : tmp) {
-                    songs.put(element, element.getArtist());
-                }
+        for (String location : locations) {
+            LinkedList<Song> tmp = filesSearch(location, extension);
+            if (tmp.isEmpty()) {
+                System.out.println("No mp3 files found in " + location);
             }
-        } catch (NullPointerException ex) {
-            System.out.println("No mp3 fle found in directory.");
-            System.out.println(ex.getMessage());
+            for (Song element : tmp) {
+                songs.put(element, element.getArtist());
+            }
         }
 
+        if (songs.isEmpty()) {
+            System.out.println("Songs list is empty.");
+            return;
+        }
         String lastArtist = null;
         for (Song s : songs.keySet()) {
+            /*if (!checkSums.add(s.getCheckSum())) {
+                checkSumLogger.info(s.getFileLocation());
+            }*/
             if (s.getArtist().equals(lastArtist)) {
                 artists.getLast().addSong(s);
             } else {
@@ -45,7 +54,7 @@ public class Main {
                 lastArtist = s.getArtist();
             }
         }
-        for (Artist element: artists) {
+        for (Artist element : artists) {
             htmlWriter.addArtist(element);
         }
         if (htmlWriter.createHTML()) {
@@ -59,9 +68,9 @@ public class Main {
     /**
      * Method returns LinkedList of files with specified extension from specified directories
      *
-     * @param root
-     * @param extension
-     * @return
+     * @param root      Specify the root directory
+     * @param extension Specify ext. of searching files
+     * @return list of files with specified extension
      */
     public static LinkedList filesSearch(String root, String extension) {
         File rootDir = new File(root);

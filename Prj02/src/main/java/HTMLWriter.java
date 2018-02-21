@@ -44,14 +44,14 @@ public class HTMLWriter {
         htmlBuilder.append("\n  </head>");
         htmlBuilder.append("\n  <body>");
         for (Artist element : artistList) {
-            htmlBuilder.append("\n<pre>").append(element.getName()).append("</pre>");
+            htmlBuilder.append("\n   <pre>").append(element.getName()).append("</pre>");
             for (Artist artist : artistList) {
-                htmlBuilder.append("\n<pre>").append(artist.getName()).append("</pre>");
+                htmlBuilder.append("\n   <pre>").append(artist.getName()).append("</pre>");
                 for (String album : artist.getAlbumsNames()) {
-                    htmlBuilder.append("\n<pre>").append(" " + album).append("</pre>");
+                    htmlBuilder.append("\n   <pre>").append(" " + album).append("</pre>");
                     LinkedList<Song> songs = artist.getSongsFromAlbum(album);
                     for (Song song : songs) {
-                        htmlBuilder.append("\n<pre>").append("  " + song.getTitle());
+                        htmlBuilder.append("\n   <pre>").append("  " + song.getTitle());
                         htmlBuilder.append(" " + song.getMinutesDuration()).append(":").append(song.getSecondsDuration());
                         htmlBuilder.append(" (").append(song.getFileLocation()).append(")").append("</pre>");
                     }

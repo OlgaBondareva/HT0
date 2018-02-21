@@ -44,7 +44,7 @@ public class Artist {
 
     public LinkedList<Song> getSongsFromAlbum(String album) {
         LinkedList<Song> songs = new LinkedList<>();
-        for (String element: albums.keySet()) {
+        for (String element : albums.keySet()) {
             if (element.equals(album)) {
                 songs.add(albums.get(element));
             }

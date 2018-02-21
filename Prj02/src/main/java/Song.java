@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Song implements Comparable<Song>{
+public class Song implements Comparable<Song> {
     private String fileLocation;
     private String title;
     private String genre;
@@ -52,6 +52,18 @@ public class Song implements Comparable<Song>{
         minutesDuration = (int) (duration / 60000);
         secondsDuration = (int) (duration % 60000) / 1000;
         this.checkSum = checkSum(fileLocation);
+        if (title.equals("")) {
+            title = "Untitled";
+        }
+        if (artist.equals("")) {
+            artist = "Unknown";
+        }
+        if (genre.equals("")) {
+            genre = "Unknown genre";
+        }
+        if (album.equals("")) {
+            album = "Unknown album";
+        }
     }
 
     public String getTitle() {
@@ -96,6 +108,7 @@ public class Song implements Comparable<Song>{
 
     /**
      * Method for getting file's check sum
+     *
      * @param fileName
      * @return string with check sum
      */
