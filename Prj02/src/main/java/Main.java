@@ -1,21 +1,14 @@
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 public class Main {
 
-    //static final Logger checkSumLogger = LogManager.getLogger(Main.class);
-    //static final Logger userLogger = LogManager.getLogger(Main.class);
-
     public static void main(String[] args) throws IOException {
-        /*if (args.length == 0) {
+        if (args.length == 0) {
             System.out.println("You didn't specify directory in the command line!");
             return;
-        }*/
-        String arg = "D:/Music";
+        }
         String extension = "mp3";
         // List of locations from command line
         LinkedList<String> locations = new LinkedList<>();
@@ -23,10 +16,10 @@ public class Main {
         TreeMap<Song, String> songs = new TreeMap<>();
         LinkedList<Artist> artists = new LinkedList<>();
 
-        HashSet<String> checkSums = new HashSet<>();
+        HashMap<String, Song> checkSums = new HashMap<>();
         HTMLWriter htmlWriter = new HTMLWriter();
-        //Collections.addAll(locations, args);
-        Collections.addAll(locations, arg);
+        CopiesLogger copiesLogger = new CopiesLogger();
+        Collections.addAll(locations, args);
         for (String location : locations) {
             LinkedList<Song> tmp = filesSearch(location, extension);
             if (tmp.isEmpty()) {
@@ -41,22 +34,25 @@ public class Main {
             System.out.println("Songs list is empty.");
             return;
         }
-        String lastArtist = null;
         for (Song s : songs.keySet()) {
-            /*if (!checkSums.add(s.getCheckSum())) {
-                checkSumLogger.info(s.getFileLocation());
-            }*/
-            if (s.getArtist().equals(lastArtist)) {
-                artists.getLast().addSong(s);
+            if (checkSums.containsKey(s.getCheckSum())) {
+                copiesLogger.addCopy(s.getFileLocation());
+                copiesLogger.addCopy(checkSums.get(s.getCheckSum()).getFileLocation());
+            }
+            checkSums.put(s.getCheckSum(), s);
+            if (artists.contains(s.getArtist())) {
+                artists.get(artists.indexOf(s.getArtist())).addSong(s);
             } else {
                 artists.add(new Artist(s.getArtist()));
                 artists.getLast().addSong(s);
-                lastArtist = s.getArtist();
             }
         }
+        // Adding all artists to the html file
         for (Artist element : artists) {
             htmlWriter.addArtist(element);
         }
+        // Creating log file and html file
+        copiesLogger.getCopiesLog();
         if (htmlWriter.createHTML()) {
             System.out.println("HTML created.");
         } else {

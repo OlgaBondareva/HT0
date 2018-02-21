@@ -2,12 +2,12 @@ import org.apache.logging.log4j.LogManager;
 
 import java.util.LinkedList;
 
-public class Logger {
+public class CopiesLogger {
 
-    private static final org.apache.logging.log4j.Logger checkSumLogger = LogManager.getLogger();
+    private static final org.apache.logging.log4j.Logger checkSumLogger = LogManager.getLogger(CopiesLogger.class);
     private LinkedList<String> copies;
 
-    public Logger() {
+    public CopiesLogger() {
         copies = new LinkedList<>();
     }
 
@@ -16,10 +16,9 @@ public class Logger {
     }
 
     public void getCopiesLog() {
-        checkSumLogger.info("Дубликаты: ");
+        //checkSumLogger.info("Дубликаты: ");
         for (String s : copies) {
-            checkSumLogger.info("+ " + s);
+            checkSumLogger.info(s);
         }
     }
-
 }
